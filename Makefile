@@ -16,7 +16,7 @@ CFLAGS :=  -Wall -lm
 threadSan := -fsanitize=thread -g
 LDFLAGS=
 DEBUGFLAG := -ggdb
-CC := gcc
+CC := mpicc
 # ------------------------------------------------------------
 
 default: $(headers) main.o Lab4_IO.o
