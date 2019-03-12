@@ -1,5 +1,5 @@
-/* 
-   Second try parallelization
+/*
+  First try parallelization
 */
 
 #define LAB4_EXTEND
@@ -30,7 +30,6 @@ int page_rank() {
     double start, end;
     int numprocesses, myrank;
     int blocksize, elementcount;
-    int continueLoop = 1;
     
     int mystart, myend;
 
@@ -73,36 +72,32 @@ int page_rank() {
     GET_TIME(start);
 
     do{
-        if (myrank == 0) {
-          ++iterationcount;
-          vec_cp(r, r_pre, nodecount);
-        }
+        ++iterationcount;
+        vec_cp(r, r_pre, nodecount);
         
         mystart = myrank*blocksize;
         myend = (myrank+1)*blocksize - 1;
         
         // update the value
         for ( i = mystart; i <= myend && i < nodecount; ++i){
-            r_local[i-mystart] = 0;
+            r[i] = 0;
             for ( j = 0; j < nodehead[i].num_in_links; ++j)
-                r_local[i-mystart] += contribution[nodehead[i].inlinks[j]];
-            r_local[i-mystart] += damp_const;
+                r[i] += contribution[nodehead[i].inlinks[j]];
+            r[i] += damp_const;
         }
         
         // update and broadcast the contribution
         for ( i=mystart; i <= myend && i<nodecount; ++i){
-            contribution_local[i-mystart] = r_local[i-mystart] / nodehead[i].num_out_links * DAMPING_FACTOR;
+            contribution[i] = r[i] / nodehead[i].num_out_links * DAMPING_FACTOR;
         }
         
-        MPI_Gather(r_local, blocksize, MPI_DOUBLE, r, blocksize, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        vec_cp(&contribution[mystart], contribution_local, blocksize);
+        vec_cp(&r[mystart], r_local, blocksize);
+        MPI_Allgather(r_local, blocksize, MPI_DOUBLE, r, blocksize, MPI_DOUBLE, MPI_COMM_WORLD);
         MPI_Allgather(contribution_local, blocksize, MPI_DOUBLE, contribution, blocksize, MPI_DOUBLE, MPI_COMM_WORLD);
         
-        if (myrank == 0) {
-            continueLoop = (rel_error(r, r_pre, nodecount) >= EPSILON);
-        }
-        MPI_Bcast(&continueLoop, 1, MPI_INT, 0, MPI_COMM_WORLD);
         // gather contribution
-    }while(continueLoop);
+    }while(rel_error(r, r_pre, nodecount) >= EPSILON);
     GET_TIME(end);
     
     MPI_Finalize();

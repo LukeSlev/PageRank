@@ -22,6 +22,15 @@ CC := mpicc
 default: $(headers) main.o Lab4_IO.o
 	$(CC) $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS) -o main main.o Lab4_IO.o
 
+main1: $(headers) main1.o Lab4_IO.o
+	$(CC) $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS) -o main1 main1.o Lab4_IO.o
+
+main2: $(headers) main2.o Lab4_IO.o
+	$(CC) $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS) -o main2 main2.o Lab4_IO.o
+
+main3: $(headers) main3.o Lab4_IO.o
+	$(CC) $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS) -o main3 main3.o Lab4_IO.o
+
 serialtester: serialtester.o Lab4_IO.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o serialtester serialtester.o Lab4_IO.o -lm
 
@@ -30,6 +39,15 @@ datatrim: datatrim.o
 
 main.o: main.c
 	$(CC) $(LDFLAGS) $(CFLAGS) main.c -c
+
+main1.o: main1.c
+	$(CC) $(LDFLAGS) $(CFLAGS) main1.c -c
+
+main2.o: main2.c
+	$(CC) $(LDFLAGS) $(CFLAGS) main2.c -c
+
+main3.o: main3.c
+	$(CC) $(LDFLAGS) $(CFLAGS) main3.c -c
 
 datatrim.o: datatrim.c
 	$(CC) $(CFLAGS) datatrim.c -c
