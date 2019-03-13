@@ -20,22 +20,22 @@ CC := mpicc
 # ------------------------------------------------------------
 
 default: $(headers) main.o Lab4_IO.o
-	$(CC) $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS) -o main main.o Lab4_IO.o
+	$(CC) -o main main.o Lab4_IO.o $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS)
 
 main1: $(headers) main1.o Lab4_IO.o
-	$(CC) $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS) -o main1 main1.o Lab4_IO.o
+	$(CC)  -o main1 main1.o Lab4_IO.o $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS)
 
 main2: $(headers) main2.o Lab4_IO.o
-	$(CC) $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS) -o main2 main2.o Lab4_IO.o
+	$(CC) -o main2 main2.o Lab4_IO.o $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS)
 
 main3: $(headers) main3.o Lab4_IO.o
-	$(CC) $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS) -o main3 main3.o Lab4_IO.o
+	$(CC) -o main3 main3.o Lab4_IO.o $(LDFLAGS) $(DEBUGFLAG) $(CFLAGS)
 
 serialtester: serialtester.o Lab4_IO.o
-	$(CC) $(LDFLAGS) $(CFLAGS) -o serialtester serialtester.o Lab4_IO.o -lm
+	$(CC) -o serialtester serialtester.o Lab4_IO.o $(LDFLAGS) $(CFLAGS)
 
 datatrim: datatrim.o
-	$(CC) $(LDFLAGS) $(CFLAGS) -o datatrim datatrim.o
+	$(CC) -o datatrim datatrim.o $(LDFLAGS) $(CFLAGS)
 
 main.o: main.c
 	$(CC) $(LDFLAGS) $(CFLAGS) main.c -c
