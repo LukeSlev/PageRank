@@ -25,12 +25,11 @@ int page_rank() {
   int i, j;
   double damp_const;
   int iterationcount = 0;
-  double cst_addapted_threshold;
   FILE *ip;
   double start, end;
   int numprocesses, myrank;
   int blocksize, elementcount;
-  
+
   // Load the data and simple verification
   if ((ip = fopen("data_input_meta","r")) == NULL) {
     printf("Error opening the data_input_meta file.\n");
@@ -38,38 +37,38 @@ int page_rank() {
   }
   fscanf(ip, "%d\n", &nodecount);
   fclose(ip);
-  
+
   MPI_Init(NULL, NULL);
   MPI_Comm_size(MPI_COMM_WORLD, &numprocesses);
   MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
-  
+
   if (node_init(&nodehead, 0, nodecount)) return 1;
-  
+
   blocksize = (((int) nodecount/numprocesses) + 1);
   elementcount = blocksize * numprocesses;
   // printf("Count: %i, Processes: %i, Size: %i", nodecount, numprocesses, blocksize);
-  
+
   // initialize variables
   r = malloc(elementcount * sizeof(double));
   r_pre = malloc(elementcount * sizeof(double));
   for ( i = 0; i < nodecount; ++i)
     r[i] = 1.0 / nodecount;
-  
+
   contribution = malloc(elementcount * sizeof(double));
   for ( i = 0; i < nodecount; ++i)
     contribution[i] = r[i] / nodehead[i].num_out_links * DAMPING_FACTOR;
   damp_const = (1.0 - DAMPING_FACTOR) / nodecount;
-  
-  
+
+
   // CORE CALCULATION
   GET_TIME(start);
-  
+
   do{
     ++iterationcount;
     vec_cp(r, r_pre, nodecount);
-    
-    
-    
+
+
+
     // update the value
     for ( i = 0; i < nodecount; ++i){
       r[i] = 0;
@@ -77,19 +76,19 @@ int page_rank() {
         r[i] += contribution[nodehead[i].inlinks[j]];
       r[i] += damp_const;
     }
-    
+
     //gather r
     //scatter contribution
-    
+
     // update and broadcast the contribution
     for ( i=0; i<nodecount; ++i){
       contribution[i] = r[i] / nodehead[i].num_out_links * DAMPING_FACTOR;
     }
-    
+
     // gather contribution
   }while(rel_error(r, r_pre, nodecount) >= EPSILON);
   GET_TIME(end);
-  
+
   if (myrank == 0) {
 
     printf("Program converged at %d th iteration.\nElapsed time %f.\n", iterationcount, end-start);
@@ -97,24 +96,24 @@ int page_rank() {
   }
 
   MPI_Finalize();
-  
+
   // post processing
   node_destroy(nodehead, nodecount);
   free(contribution);
-  
+
   free(r); free(r_pre);
+  return(0);
 }
 
 
 
 /*
  Main function
- 
+
  */
 int main(int argc, char* argv[])
 {
   page_rank();
-  
+
   return(0);
 }
-

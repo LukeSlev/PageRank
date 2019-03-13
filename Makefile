@@ -9,7 +9,7 @@
 # ------------------------------------------------------------
 
 target := lab4
-allFiles := Makefile timer.h main.c datatrim.c serialtester.c web-Stanforf.txt
+allFiles := Makefile timer.h main.c main1.c main2.c main3.c datatrim.c serialtester.c web-Stanford.txt Lab4_IO.c Lab4_IO.h
 objects :=
 headers := timer.h Lab4_IO.h
 CFLAGS :=  -Wall -lm
@@ -65,4 +65,4 @@ tar:
 	gzip $(target).tar
 
 clean:
-	rm *.o main serialtester datatrim
+	rm *.o main main1 main2 main3 serialtester datatrim

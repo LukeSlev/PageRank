@@ -21,11 +21,7 @@ int main (int argc, char* argv[]){
     int i, j;
     double damp_const;
     int iterationcount = 0;
-    int collected_nodecount;
-    double *collected_r;
-    double cst_addapted_threshold;
-    double error;
-    FILE *fp, *ip;
+    FILE *ip;
     double start, end;
 
     if ((ip = fopen("data_input_meta","r")) == NULL) {
@@ -34,7 +30,7 @@ int main (int argc, char* argv[]){
     }
     fscanf(ip, "%d\n", &nodecount);
     fclose(ip);
-    
+
     if (node_init(&nodehead, 0, nodecount)) return 254;
     // initialize variables
     r = malloc(nodecount * sizeof(double));
@@ -68,7 +64,9 @@ int main (int argc, char* argv[]){
     // post processing
     node_destroy(nodehead, nodecount);
     free(contribution);
-    
+
     // Compare the result
     free(r); free(r_pre);
+
+    return(0);
 }
