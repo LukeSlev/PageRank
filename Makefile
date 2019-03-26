@@ -3,9 +3,14 @@
 #   author: Luke Slevinsky, 1453199
 #						Logan McDonald, 1401297
 #
-# Usage: make  // compiles the program
-#        make tar   	 // create a 'tar.gz' archive of 'allFiles'
-#        make clean 	 // remove unneeded files
+# Usage: make  // compiles the main parallel program
+#				 make main1        // compiles the serial version
+#				 make main2        // compiles the 1st parallel iteration
+#				 make main3        // compiles the 2st parallel iteration
+#				 make serialtester // compiles the serialtester
+#				 make datatrim     // compiles the datatrimmer
+#        make tar   	     // create a 'tar.gz' archive of 'allFiles'
+#        make clean 	     // remove unneeded files
 # ------------------------------------------------------------
 
 target := lab4
